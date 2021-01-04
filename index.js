@@ -15,7 +15,7 @@ const main = async () => {
 
   var client = github.client();
 
-  var ghpr = client.pr(`${targetRepo}/${targetRepoOwner}`, prNumber)
+  var ghpr = client.pr(`${targetRepoOwner}/${targetRepo}`, prNumber)
 
   if (ghpr.state !== 'merged') {
     // Making sure that the PR was merged
