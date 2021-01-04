@@ -1,40 +1,32 @@
 'use strict'
 
 const core = require('@actions/core')
-const { promises: fs } = require('fs')
+var github = require('octonode')
 
 const main = async () => {
-  const path = core.getInput('path')
-  const content = await fs.readFile(path, 'utf8')
+  const author = core.getInput('author')
+  const prLink = core.getInput('prLink')
+  const targetRepo = core.getInput('targetRepo')
+  const targetRepoOwner = core.getInput('targetRepoOwner')
 
-  const regexList = [
-    /(?<=\*\*Team Name:\*\* ).*/g,
-    /(?<=\*\*Project Name:\*\* ).*/g,
-    /(?<=\*\*Contact Name:\*\* ).*/g,
-    /(?<=\*\*Contact Email:\*\* ).*/g,
-    /(?<=\*\*Total Costs:\*\* ).*(?= BTC)/gi,
-    /(?<=\*\*Total Costs:\*\* ).*(?= DAI)/gi,
-    /(?<=\*\*Registered Address:\*\* ).*/g
-  ]
+  const prNumberPattern = /(?<=pulls\/)\d*/g
 
-  const outputs = [
-    'team_name',
-    'project_name',
-    'contact_name',
-    'contact_email',
-    'total_cost_btc',
-    'total_cost_dai',
-    'address'
-  ]
+  const prNumber = prLink.match(prNumberPattern)[0]
 
-  regexList.map(function (reg, i) {
-    try {
-      const result = content.match(reg)[0]
-      core.setOutput(outputs[i], result)
-    } catch {
-      core.error(`Match not found for: ${outputs[i]}`)
+  var ghpr = github.pr(`${targetRepo}/${targetRepoOwner}`, prNumber)
+
+  if (ghpr.state !== 'merged') {
+    // Making sure that the PR was merged
+    core.setOutput('isValid', false)
+  } else {
+    const originalPrAuthor = ghpr.userName
+    // Making sure it's the same user
+    if (originalPrAuthor !== author) {
+      core.setOutput('isValid', false)
+    } else {
+      core.setOutput('isValid', true)
     }
-  })
+  }
 }
 
 main().catch(err => core.setFailed(err.message))

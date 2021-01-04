@@ -15,7 +15,8 @@
     "publish": false
   },
   "dependencies": {
-    "@actions/core": "^1.2.6"
+    "@actions/core": "^1.2.6",
+    "octonode": "^0.10.0"
   },
   "devDependencies": {
     "@zeit/ncc": "^0.20.5",

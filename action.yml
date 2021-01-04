@@ -1,25 +1,22 @@
-name: Read grant file
+name: Validate PR
 author: mmagician
-description: 'Read file contents'
+description: 'Check whether the referenced PR indeed exists in the target PR'
 inputs:
-  path:
-    description: 'File path'
+  targetRepo:
+    description: 'Which repo to check against'
+    required: true
+  targetRepoOwner:
+    description: 'Which repo to check against (owner)'
+    required: true
+  prLink:
+    description: 'The PR link to check existance of'
+    required: true
+  author:
+    description: 'Check whether the author is the same'
     required: true
 outputs:
-  team_name:
-    description: 'Team name'
-  contact_name:
-    description: 'Contact name'
-  contact_email:
-    description: 'Contact email'
-  project_name:
-    description: 'Project name'
-  address:
-    description: 'Registered address of legal entity'
-  total_cost_btc:
-    description: 'Total cost, BTC'
-  total_cost_dai:
-    description: 'Total cost, DAI'
+  isValid:
+    description: 'True if all checks pass, false otherwise'
 runs:
   using: 'node12'
   main: 'dist/index.js'

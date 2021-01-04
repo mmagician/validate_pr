@@ -1,21 +1,21 @@
 # read-file-action
 
-Read file contents. Forked and adapted from https://github.com/juliangruber/read-file-action
-
-Two branches of this repo will be used for parsing different target repos.
-Use the master branch for parsing applications from the [Open-Grants](https://github.com/w3f/Open-Grants-Program/) repo, and the grant-delivery branch for [Grant-Milestone-Delivery](https://github.com/w3f/Grant-Milestone-Delivery/) repo.
+Validate whether the submitting PR author is indeed the author of the merged PR in the target repo that he claims he is.
 
 ## Usage
 
 ```yaml
 steps:
-  - name: Reads the filled-in application template and parses it
-    id: grant_parser
-    uses: mmagician/read-file-action@master
+  - name: Validate PR
+    id: validate_pr
+    uses: mmagician/validate_pr@v1
     with:
-      path: <path to the file>
-  - name: Echo outputs
-    run: echo ${{ steps.grant_parser.outputs.team_name }}
+      targetRepoOwner: "w3f"
+      targetRepo: "Open-Grants-Program"
+      prLink: "${{ steps.grant_parser.outputs.contract_url }}"
+      author: "${{ github.event.pull_request.author }}
+  - name: Echo output
+    run: echo ${{ steps.validate_pr.outputs.isValid }}
 ```
 
 ## Building
