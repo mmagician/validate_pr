@@ -2190,7 +2190,9 @@ const main = async () => {
 
   const prNumber = prLink.match(prNumberPattern)[0]
 
-  var ghpr = github.pr(`${targetRepo}/${targetRepoOwner}`, prNumber)
+  var client = github.client();
+
+  var ghpr = client.pr(`${targetRepo}/${targetRepoOwner}`, prNumber)
 
   if (ghpr.state !== 'merged') {
     // Making sure that the PR was merged

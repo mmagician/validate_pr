@@ -13,4 +13,7 @@ jobs:
       - uses: ./
         id: package
         with:
-          path: package.json
+          targetRepoOwner: "w3f"
+          targetRepo: "Open-Grants-Program"
+          prLink: "https://github.com/w3f/Open-Grants-Program/pulls/174"
+          author: "mmagician"
